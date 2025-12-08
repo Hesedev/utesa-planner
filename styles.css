@@ -1,0 +1,7 @@
+body {
+    font-family: system-ui, sans-serif;
+}
+
+#app {
+    min-height: 70vh;
+}
