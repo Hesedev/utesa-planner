@@ -4,22 +4,29 @@ import { homeView } from "./views/homeView.js";
 import { editorView } from "./editor/editorView.js";
 import { plannerView } from "./planner/plannerView.js";
 
-// Rutas disponibles
+// Mapa de rutas limpias
 const routes = {
-    home: homeView,
-    editor: editorView,
-    planner: plannerView
+    "/": homeView,
+    "/pensums": editorView,
+    "/planificador": plannerView
 };
 
-// Función de enrutamiento
+// Obtiene la ruta actual desde el hash
+function getCurrentRoute() {
+    const raw = location.hash.replace("#", "").trim();
+    return raw === "" ? "/" : raw;
+}
+
+// Router principal
 function router() {
-    const hash = location.hash.replace("#", "") || "home";
-    const view = routes[hash] ?? homeView;
+    const path = getCurrentRoute();
+    const view = routes[path] ?? homeView;
     render(view());
 }
 
-// Detectar cambios
+// Eventos
 window.addEventListener("hashchange", router);
+window.addEventListener("DOMContentLoaded", router);
 
 // Render inicial
 router();

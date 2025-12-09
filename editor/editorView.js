@@ -17,7 +17,132 @@ import {
 } from "./editor.js";
 
 import { state, saveState } from "../state.js";
-import { uid } from "../utils.js";
+import { uid, render } from "../utils.js";
+
+// Variable global (o usa localStorage) para guardar el ID del tab activo
+let activeTabId = '#tabResumen'; // Valor por defecto
+
+/* ===========================================
+   UTILITY: Re-renderiza la vista actual
+   =========================================== */
+function reinitializeTabs() {
+    // 1. Escuchar el evento de Bootstrap para actualizar el ID activo
+    const tabList = document.getElementById('editorTabs');
+    if (tabList) {
+        tabList.addEventListener('shown.bs.tab', function (e) {
+            // Guardar el nuevo tab activo para la próxima recarga
+            activeTabId = e.target.getAttribute('data-bs-target');
+        });
+    }
+
+    // 2. Intentar activar el tab previamente activo
+    // Necesitamos un pequeño retraso para asegurar que Bootstrap ha procesado el DOM
+    setTimeout(() => {
+        const triggerEl = document.querySelector(`[data-bs-target="${activeTabId}"]`);
+        if (triggerEl) {
+            // Eliminar la clase 'active' de cualquier otro botón de tab
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('show', 'active'));
+
+            // Activar el tab guardado
+            const tab = new bootstrap.Tab(triggerEl);
+            tab.show();
+        }
+    }, 50); // Pequeño delay de 50ms para asegurar la inicialización de Bootstrap
+}
+
+
+function refreshEditorView() {
+    // 1. Genera el nuevo HTML
+    const newHtml = editorView();
+
+    // 2. Renderiza el HTML usando tu método de utilidad
+    render(newHtml);
+
+    // 3. Restaura el estado de los tabs
+    reinitializeTabs();
+}
+
+/* ===========================================
+   UTILITY: Renderiza y actualiza SOLO un ciclo
+   =========================================== */
+function refreshCycleCard(cycleId) {
+    const p = getPensum();
+    const cycle = p.ciclos.find(c => c.id === cycleId);
+
+    if (cycle) {
+        // Encontrar el índice para mostrar "Ciclo X"
+        const index = p.ciclos.findIndex(c => c.id === cycleId);
+
+        // 1. Generar el nuevo HTML solo para la tarjeta del ciclo
+        const newHtml = renderCycleCard(cycle, index);
+
+        // 2. Encontrar el elemento existente en el DOM
+        const existingCycleCard = document.querySelector(`[data-cycle="${cycleId}"]`);
+
+        if (existingCycleCard) {
+            // 3. Reemplazar el contenido de la tarjeta existente
+            // Usamos outerHTML para reemplazar la tarjeta completa.
+            existingCycleCard.outerHTML = newHtml;
+        }
+    }
+}
+
+/* ===========================================
+   UTILITY: Renderiza y actualiza TODO el contenedor de ciclos
+   =========================================== */
+function refreshCyclesContainer() {
+    const p = getPensum();
+    if (!p) return;
+
+    const container = document.getElementById('cyclesContainerInner');
+    if (container) {
+        // Genera todo el HTML de los ciclos
+        container.innerHTML = p.ciclos.map((c, i) => renderCycleCard(c, i)).join("");
+    }
+}
+
+/* ===========================================
+   UTILITY: Renderiza y actualiza TODO el contenedor de electivas
+   =========================================== */
+function refreshElectivasContainer() {
+    const p = getPensum();
+    if (!p) return;
+
+    const container = document.getElementById('electivasContainerInner');
+    if (container) {
+        // Genera todo el HTML de las electivas
+        container.innerHTML = p.electivas.map(e => renderMateriaUnified(null, e, true)).join("");
+    }
+}
+
+/* ===========================================
+   UTILITY: Actualiza solo el bloque de resumen
+   =========================================== */
+function refreshResumen() {
+    const p = getPensum();
+    if (!p) return;
+
+    const totalCiclos = p.ciclos.length;
+    const totalMaterias = p.ciclos.reduce((s, c) => s + (c.materias?.length || 0), 0);
+    const totalCreditos = p.ciclos.reduce((s, c) => s + (c.materias?.reduce((ss, m) => ss + (m.creditos || 0), 0) || 0), 0);
+    const totalElectivas = p.electivas?.length || 0;
+
+    const resumenDiv = document.getElementById('tabResumen');
+    if (resumenDiv) {
+        // Reemplaza el contenido interno de la pestaña de resumen
+        resumenDiv.innerHTML = renderResumen(totalCiclos, totalMaterias, totalCreditos, totalElectivas);
+    }
+}
+
+// -------------------------------------------------------------
+// Nota: Puedes crear una función de alto nivel que llame a todas:
+function smartRefresh() {
+    refreshResumen();
+    // No necesitamos llamar a refreshCyclesContainer/refreshElectivasContainer aquí,
+    // ya que las funciones de evento (add/delete) lo harán de forma específica.
+}
+// -------------------------------------------------------------
 
 /* ===========================================
    Helpers de escape
@@ -416,7 +541,23 @@ document.addEventListener("click", (ev) => {
     // Add cycle
     if (t.id === "btnAddCycle") {
         addCycle();
-        location.reload();
+
+        // 1. Re-renderiza todos los ciclos (necesario porque los índices cambian)
+        refreshCyclesContainer();
+
+        // 2. Actualiza el resumen
+        refreshResumen();
+
+        // 3. Scroll al nuevo ciclo (el último en el contenedor)
+        activeTabId = '#tabCiclos';
+        reinitializeTabs();
+        setTimeout(() => {
+            const container = document.getElementById('cyclesContainerInner');
+            if (container && container.lastElementChild) {
+                container.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }
+        }, 50);
+
         return;
     }
 
@@ -428,16 +569,58 @@ document.addEventListener("click", (ev) => {
 
     // Add materia
     if (t.dataset.addMateria) {
-        addMateria(t.dataset.addMateria);
-        location.reload();
+        const cycleId = t.dataset.addMateria;
+
+        addMateria(cycleId);
+
+        // LLAMADA CLAVE: Solo actualiza la tarjeta del ciclo
+        refreshCycleCard(cycleId);
+
+        // ACTUALIZAR RESUMEN (Materias y Créditos)
+        refreshResumen();
+
+        // Scroll
+        const cycleContainer = document.querySelector(`[data-cycle="${cycleId}"]`);
+        if (cycleContainer) {
+            cycleContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+
         return;
     }
 
     // Delete ciclo
     if (t.dataset.deleteCycle) {
         if (confirm("¿Eliminar ciclo completo?")) {
-            deleteCycle(t.dataset.deleteCycle);
-            location.reload();
+            const cycleId = t.dataset.deleteCycle;
+
+            // 1. GUARDAR POSICIÓN y el elemento que le sigue
+            const cycleCard = document.querySelector(`[data-cycle="${cycleId}"]`);
+            const nextCycleId = cycleCard.nextElementSibling?.dataset.cycle;
+            const scrollPosition = cycleCard ? cycleCard.offsetTop : 0;
+
+            deleteCycle(cycleId);
+
+            // 2. Re-renderiza todos los ciclos (necesario para reindexar)
+            refreshCyclesContainer();
+
+            // 3. Actualiza el resumen
+            refreshResumen();
+
+            // 4. Restaurar Scroll
+            activeTabId = '#tabCiclos';
+            reinitializeTabs();
+            setTimeout(() => {
+                let targetElement = null;
+                if (nextCycleId) {
+                    targetElement = document.querySelector(`[data-cycle="${nextCycleId}"]`);
+                }
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    document.getElementById('cyclesContainerInner').scrollTop = scrollPosition - 50;
+                }
+            }, 50);
         }
         return;
     }
@@ -446,8 +629,24 @@ document.addEventListener("click", (ev) => {
     if (t.dataset.deleteMateria) {
         const [c, m] = t.dataset.deleteMateria.split(":");
         if (confirm("¿Eliminar materia?")) {
+
+            // 1. GUARDAR POSICIÓN
+            const materiaCard = document.querySelector(`[data-materia="${c}:${m}"]`);
+            const scrollPosition = materiaCard ? materiaCard.offsetTop : 0;
+
             deleteMateria(c, m);
-            location.reload();
+
+            // 2. LLAMADA CLAVE: Solo actualiza la tarjeta del ciclo afectado
+            refreshCycleCard(c);
+
+            // 3. ACTUALIZAR RESUMEN (Materias y Créditos)
+            refreshResumen();
+
+            // 4. Restaurar Scroll
+            setTimeout(() => {
+                document.getElementById('cyclesContainerInner').scrollTop = scrollPosition - 50;
+            }, 50);
+
         }
         return;
     }
@@ -455,45 +654,86 @@ document.addEventListener("click", (ev) => {
     // Add electiva
     if (t.id === "btnAddElectiva") {
         addElectiva();
-        location.reload();
+
+        // 1. Re-renderiza solo el contenedor de electivas
+        refreshElectivasContainer();
+
+        // 2. Actualiza el resumen
+        refreshResumen();
+
+        // 3. Forzar el tab de electivas y Scroll
+        activeTabId = '#tabElectivas';
+        reinitializeTabs();
+
+        setTimeout(() => {
+            const electivasContainer = document.getElementById('electivasContainerInner');
+            if (electivasContainer) {
+                electivasContainer.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }
+        }, 50);
+
         return;
     }
 
     // Delete electiva
     if (t.dataset.deleteElectiva) {
         if (confirm("¿Eliminar electiva?")) {
-            deleteElectiva(t.dataset.deleteElectiva);
-            location.reload();
+            const electivaId = t.dataset.deleteElectiva;
+
+            // 1. GUARDAR POSICIÓN
+            const electivaCard = document.querySelector(`[data-materia="electiva:${electivaId}"]`);
+            const scrollPosition = electivaCard ? electivaCard.offsetTop : 0;
+
+            deleteElectiva(electivaId);
+
+            // 2. Re-renderiza solo el contenedor de electivas
+            refreshElectivasContainer();
+
+            // 3. Actualiza el resumen
+            refreshResumen();
+
+            // 4. Restaurar Scroll
+            activeTabId = '#tabElectivas';
+            reinitializeTabs();
+            setTimeout(() => {
+                document.getElementById('electivasContainerInner').scrollTop = scrollPosition - 50;
+            }, 50);
         }
         return;
     }
 });
 
 /* ===========================================
-   INPUT EVENTS
+   INPUT EVENTS (Ajustes de Reactividad)
    =========================================== */
 document.addEventListener("input", (ev) => {
     const t = ev.target;
     const p = getPensum();
     if (!p) return;
 
-    if (t.id === "nombrePensum") {
-        const ok = renamePensum(p.id, t.value);
-        if (!ok) alert("Nombre duplicado o inválido");
-        return;
-    }
+    // ... (nombrePensum no necesita refresh, solo se actualiza el valor en la pantalla)
 
-    // Materias
+    // Materias (se modifican los créditos, así que hay que actualizar el resumen)
     if (t.dataset.edit) {
         const [c, m, field] = t.dataset.edit.split(":");
         editMateriaField(c, m, field, t.value);
+
+        // Si el campo modificado es 'creditos', actualizamos el resumen
+        if (field === 'creditos') {
+            refreshResumen();
+        }
         return;
     }
 
-    // Electivas
+    // Electivas (se modifican los créditos, así que hay que actualizar el resumen)
     if (t.dataset.editElectiva) {
         const [id, field] = t.dataset.editElectiva.split(":");
         editElectivaField(id, field, t.value);
+
+        // Si el campo modificado es 'creditos', actualizamos el resumen
+        if (field === 'creditos') {
+            refreshResumen();
+        }
         return;
     }
 });

@@ -10,12 +10,12 @@ export function homeView() {
                 </p>
 
                 <div class="mt-4">
-                    <a href="#editor" class="btn btn-warning btn-lg me-2">
-                        Editor de Pensum
+                    <a href="#/pensums" class="btn btn-warning btn-lg me-2">
+                        Pensums
                     </a>
 
-                    <a href="#planner" class="btn btn-outline-success btn-lg">
-                        Planificación
+                    <a href="#/planificador" class="btn btn-outline-success btn-lg">
+                        Planificador
                     </a>
                 </div>
             </div>
