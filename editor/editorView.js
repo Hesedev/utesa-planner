@@ -198,6 +198,13 @@ export function editorView() {
       </div>
     </div>
 
+    <hr>
+    
+    <div class="mb-3">
+      <label class="form-label">Importar pensum (.json)</label>
+      <input id="fileImport" type="file" accept="application/json" class="form-control">
+    </div>
+
     <h4>Ciclos</h4>
     <div id="cyclesContainer">
       ${p.ciclos.map((cycle, i) => renderCycle(cycle, i)).join("")}
@@ -208,13 +215,6 @@ export function editorView() {
     <h4>Electivas</h4>
     <div id="electivasContainer">
       ${p.electivas.map(renderElectivaCard).join("")}
-    </div>
-
-    <hr>
-
-    <div class="mb-3">
-      <label class="form-label">Importar pensum (.json)</label>
-      <input id="fileImport" type="file" accept="application/json" class="form-control">
     </div>
   `;
 
