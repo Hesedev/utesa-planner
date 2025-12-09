@@ -1,7 +1,11 @@
 body {
     font-family: system-ui, sans-serif;
+    min-height: 100vh;
 }
 
-#app {
-    min-height: 70vh;
+#homeContainer {
+    height: calc(100vh - 56px - 3rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
