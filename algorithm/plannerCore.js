@@ -1,86 +1,85 @@
 // plannerCore.js
-// Algoritmo A* para generar la ruta mínima de materias por ciclo.
+// Algoritmo determinista, greedy y eficiente para generar ruta mínima por ciclo.
 // Exporta: runPlanner(materiasArray, aprobadasArray, maxMaterias, maxCreditos, options)
 // - materiasArray: array de objetos {codigo, nombre, creditos, prerequisitos[], corequisitos[], cuatrimestre, tipo, reglas}
 // - aprobadasArray: array de códigos ya aprobados
 // - maxMaterias: límite de materias por ciclo
 // - maxCreditos: límite de créditos por ciclo
-// - options: { maxCombosLimit, expansionCap, preferEarlierCuatr } (opcionales)
+// - options: { preferEarlierCuatr (default true), debug (default false) }
 
 export function runPlanner(materiasInput, aprobadasArray = [], maxMaterias = 4, maxCreditos = 18, options = {}) {
-    const maxCombosLimit = options.maxCombosLimit ?? 4000;
-    const expansionCap = options.expansionCap ?? 400000;
     const preferEarlierCuatr = options.preferEarlierCuatr ?? true;
+    const debug = options.debug ?? false;
 
-    // 1) Filtrar electivas (no se toman automáticamente)
-    const materiasFiltered = materiasInput.filter(m => (m.tipo ?? "obligatoria") !== "electiva");
+    if (!Array.isArray(materiasInput)) return [];
 
-    // 2) Normalizar y crear índices
-    const materias = materiasFiltered.map(m => ({
-        codigo: (m.codigo ?? "").toString(),
-        nombre: (m.nombre ?? "").toString(),
-        creditos: Number(m.creditos ?? 0),
+    // 1) Filtrar electivas (no se agendan automáticamente)
+    const materiasFiltered = materiasInput.filter(m => (m.tipo ?? "normal") !== "electiva");
+
+    // 2) Normalizar estructura y crear índices
+    const materias = materiasFiltered.map((m, i) => ({
+        codigo: String(m.codigo ?? "").trim(),
+        nombre: String(m.nombre ?? ""),
+        creditos: Number.isFinite(Number(m.creditos)) ? Number(m.creditos) : 0,
         prerequisitos: Array.isArray(m.prerequisitos) ? m.prerequisitos.slice() : [],
         corequisitos: Array.isArray(m.corequisitos) ? m.corequisitos.slice() : [],
-        cuatrimestre: Number(m.cuatrimestre ?? 999),
-        reglas: m.reglas ? { ...m.reglas } : {}
+        cuatrimestre: Number.isFinite(Number(m.cuatrimestre)) ? Number(m.cuatrimestre) : 999,
+        reglas: (m.reglas && typeof m.reglas === "object") ? { ...m.reglas } : {}
     }));
 
     const n = materias.length;
     if (n === 0) return [];
 
     const codeToIdx = new Map();
-    materias.forEach((m, i) => {
-        if (!m.codigo) console.warn("Materia sin código detectada en input, índice:", i);
-        codeToIdx.set(m.codigo, i);
-    });
+    const codigoByIdx = Array(n).fill("");
+    const cuatr = Array(n).fill(999);
+    for (let i = 0; i < n; i++) {
+        const code = materias[i].codigo;
+        codeToIdx.set(code, i);
+        codigoByIdx[i] = code;
+        cuatr[i] = materias[i].cuatrimestre;
+    }
 
-    // 3) Construir prereq mask y coreq lists y requiresAllUntil
-    const prereqMask = Array(n).fill(0n);
+    // 3) Precompute prereq mask & coreq adjacency & requires_all_until
+    const prereqMask = Array.from({ length: n }, () => 0n);
     const coreqList = Array.from({ length: n }, () => []);
     const requiresAllUntil = Array(n).fill(null);
-    const cuatr = materias.map(m => m.cuatrimestre);
-    const codigoByIdx = materias.map(m => m.codigo);
 
     for (let i = 0; i < n; i++) {
         const m = materias[i];
-        for (let pre of m.prerequisitos) {
+        for (const pre of m.prerequisitos || []) {
             const idx = codeToIdx.get(pre);
             if (idx === undefined) {
-                console.warn(`Prerequisito desconocido "${pre}" referenciado por ${m.codigo}. Ignorando esa referencia.`);
+                if (debug) console.warn(`Prerequisito desconocido "${pre}" para ${m.codigo}`);
                 continue;
             }
             prereqMask[i] |= (1n << BigInt(idx));
         }
-        for (let co of m.corequisitos) {
+        for (const co of m.corequisitos || []) {
             const idx = codeToIdx.get(co);
             if (idx === undefined) {
-                console.warn(`Corequisito desconocido "${co}" referenciado por ${m.codigo}. Ignorando esa referencia.`);
+                if (debug) console.warn(`Corequisito desconocido "${co}" para ${m.codigo}`);
                 continue;
             }
             coreqList[i].push(idx);
         }
-        if (m.reglas?.requires_all_until != null) requiresAllUntil[i] = Number(m.reglas.requires_all_until);
+        if (m.reglas?.requires_all_until != null) {
+            const v = Number(m.reglas.requires_all_until);
+            if (Number.isFinite(v)) requiresAllUntil[i] = v;
+        }
     }
 
-    const allMask = (1n << BigInt(n)) - 1n;
-
-    // bit utilities
-    function bitCount(x) {
-        let c = 0;
-        while (x) { c += Number(x & 1n); x >>= 1n; }
-        return c;
-    }
+    // helpers
+    function bitCount(x) { let v = BigInt(x); let c = 0; while (v) { c += Number(v & 1n); v >>= 1n; } return c; }
     function maskToCodes(mask) {
         const out = [];
-        for (let i = 0; i < n; i++) {
-            if (((mask >> BigInt(i)) & 1n) === 1n) out.push(codigoByIdx[i]);
-        }
+        for (let i = 0; i < n; i++) if (((mask >> BigInt(i)) & 1n) === 1n) out.push(codigoByIdx[i]);
         return out;
     }
 
-    // coreq closure builder: returns mask of closure (excluding already taken),
-    // or null if invalid (some prereqs or requires_all_until violated)
+    // Build coreq closure for a seed index given currentlyTakenMask.
+    // Returns setMask (BigInt) including seed and all reachable coreqs that are not already taken,
+    // or null if closure invalid (some course in closure has prereqs or requires_all_until not satisfied by currentTakenMask).
     function buildCoreqClosure(seedIdx, currentTakenMask) {
         const stack = [seedIdx];
         let closure = 0n;
@@ -90,73 +89,36 @@ export function runPlanner(materiasInput, aprobadasArray = [], maxMaterias = 4, 
             const u = stack.pop();
             if (visited.has(u)) continue;
             visited.add(u);
-            // if already taken, don't include it in closure (it's satisfied)
-            if (((currentTakenMask >> BigInt(u)) & 1n) === 0n) {
-                closure |= (1n << BigInt(u));
-            }
-            for (const co of coreqList[u]) {
-                if (!visited.has(co)) stack.push(co);
+            if (((currentTakenMask >> BigInt(u)) & 1n) === 0n) closure |= (1n << BigInt(u));
+            for (const coIdx of coreqList[u] || []) {
+                if (!visited.has(coIdx)) stack.push(coIdx);
             }
         }
 
-        // validate that for every course in closure, its prereqs are subset of currentTakenMask
+        // validate closure: prereqs and requires_all_until must be satisfied by currentTakenMask (NOT by closure)
         for (let u = 0; u < n; u++) {
             if (((closure >> BigInt(u)) & 1n) === 1n) {
-                // prereqs must be already in currentTakenMask (cannot be satisfied by coreqs)
                 if ((prereqMask[u] & ~currentTakenMask) !== 0n) return null;
-                // requires_all_until must be satisfied already (cannot be satisfied by coreqs)
                 const lim = requiresAllUntil[u];
                 if (lim != null) {
+                    // every subject with cuatrimestre <= lim must already be in currentTakenMask
                     for (let v = 0; v < n; v++) {
                         if (cuatr[v] <= lim && (((currentTakenMask >> BigInt(v)) & 1n) === 0n)) return null;
                     }
                 }
             }
         }
-
         return closure;
     }
 
-    // longest prereq chain remaining (lower bound)
-    function longestChainRemaining(currentTakenMask) {
-        const memo = Array(n).fill(-1);
-        function dfs(u) {
-            if (((currentTakenMask >> BigInt(u)) & 1n) === 1n) return 0;
-            if (memo[u] !== -1) return memo[u];
-
-            let preMask = prereqMask[u] & ~currentTakenMask;
-            if (preMask === 0n) { memo[u] = 1; return 1; }
-
-            let best = 0;
-            for (let v = 0; v < n; v++) {
-                if (((preMask >> BigInt(v)) & 1n) === 1n) {
-                    const d = dfs(v);
-                    if (d > best) best = d;
-                }
-            }
-            memo[u] = best + 1;
-            return memo[u];
-        }
-
-        let globalMax = 0;
-        for (let u = 0; u < n; u++) {
-            if (((currentTakenMask >> BigInt(u)) & 1n) === 0n) {
-                const d = dfs(u);
-                if (d > globalMax) globalMax = d;
-            }
-        }
-        return globalMax;
-    }
-
-    // compute eligible groups (closures) for given taken mask and respecting maxCreditos
-    function computeEligibleGroups(currentTakenMask, maxCreditosPerGroup) {
-        const groups = [];
+    // Compute eligible seeds (courses) given currentTakenMask
+    function computeEligibleSeeds(currentTakenMask) {
+        const seeds = [];
         for (let i = 0; i < n; i++) {
             if (((currentTakenMask >> BigInt(i)) & 1n) === 1n) continue; // already taken
-            // prereqs must be subset of currentTakenMask (cannot satisfy prereqs in same cycle)
+            // prereqs must be subset of currentTakenMask (cannot be satisfied same cycle)
             if ((prereqMask[i] & ~currentTakenMask) !== 0n) continue;
-
-            // requires_all_until for this course must already be satisfied
+            // requires_all_until
             const lim = requiresAllUntil[i];
             if (lim != null) {
                 let ok = true;
@@ -165,195 +127,157 @@ export function runPlanner(materiasInput, aprobadasArray = [], maxMaterias = 4, 
                 }
                 if (!ok) continue;
             }
-
-            const closure = buildCoreqClosure(i, currentTakenMask);
-            if (closure == null) continue;
-
-            // compute credit sum of closure
-            let creditSum = 0;
-            for (let j = 0; j < n; j++) {
-                if (((closure >> BigInt(j)) & 1n) === 1n) creditSum += materias[j].creditos;
-            }
-            if (creditSum > maxCreditosPerGroup) continue;
-
-            const size = bitCount(closure);
-            const priority = preferEarlierCuatr ? computeGroupPriority(closure) : size;
-            groups.push({ mask: closure, size, creditos: creditSum, priority });
+            seeds.push(i);
         }
-
-        groups.sort((a, b) => a.priority - b.priority || a.size - b.size);
-        return groups;
+        return seeds;
     }
 
-    function computeGroupPriority(mask) {
+    // compute a simple "unlock score": how many courses have this as prereq (helps prioritization)
+    const unlockCount = Array(n).fill(0);
+    for (let i = 0; i < n; i++) {
+        const preMask = prereqMask[i];
+        for (let j = 0; j < n; j++) {
+            if (((preMask >> BigInt(j)) & 1n) === 1n) unlockCount[j] += 1;
+        }
+    }
+
+    // main iterative greedy loop
+    let takenMask = 0n;
+    for (const code of (aprobadasArray || [])) {
+        const idx = codeToIdx.get(code);
+        if (idx !== undefined) takenMask |= (1n << BigInt(idx));
+    }
+
+    const allMask = (1n << BigInt(n)) - 1n;
+    if ((takenMask & allMask) === allMask) return []; // ya completado
+
+    const plan = [];
+    const visitedStates = new Set(); // to detect stagnation, store takenMask string
+
+    while (true) {
+        if (((takenMask) & allMask) === allMask) break; // terminado
+
+        const stateKey = takenMask.toString();
+        if (visitedStates.has(stateKey)) {
+            // no progreso posible (loop), break
+            if (debug) console.warn("Planner: estado ya visto, rompiendo bucle para evitar loop.");
+            break;
+        }
+        visitedStates.add(stateKey);
+
+        // 1) obtener seeds elegibles (candidatos base)
+        const seeds = computeEligibleSeeds(takenMask);
+        if (!seeds || seeds.length === 0) {
+            if (debug) console.warn("Planner: no hay cursos elegibles desde el estado actual. Salida parcial.");
+            break;
+        }
+
+        // 2) para cada seed, construir closure y guardarlo si válido
+        const closures = [];
+        for (const s of seeds) {
+            const clo = buildCoreqClosure(s, takenMask);
+            if (clo == null) continue;
+            // compute closure size & credits
+            let size = 0, creds = 0;
+            for (let j = 0; j < n; j++) {
+                if (((clo >> BigInt(j)) & 1n) === 1n) { size++; creds += materias[j].creditos; }
+            }
+            if (size === 0) continue; // nothing to take
+            if (creds > maxCreditos) continue; // impossible closure for a single cycle
+            closures.push({ seed: s, mask: clo, size, creds, minCuatr: minCuatrOfMask(clo), unlock: computeUnlockPotential(clo) });
+        }
+
+        if (closures.length === 0) {
+            if (debug) console.warn("Planner: no closures válidas (coreqs/prereqs/limits). Salida parcial.");
+            break;
+        }
+
+        // 3) ordenar closures por prioridad:
+        // preferEarlierCuatr -> menor minCuatr first
+        // then larger size (fill cycle)
+        // then larger unlock potential
+        closures.sort((a, b) => {
+            if (preferEarlierCuatr) {
+                if (a.minCuatr !== b.minCuatr) return a.minCuatr - b.minCuatr;
+            }
+            if (b.size !== a.size) return b.size - a.size;
+            if (b.unlock !== a.unlock) return b.unlock - a.unlock;
+            return a.creds - b.creds; // prefer less credits if tie
+        });
+
+        // 4) greedy pack closures into this cycle without overlap until limits reached
+        let cycleMask = 0n;
+        let cycleCount = 0;
+        let cycleCreds = 0;
+        for (const c of closures) {
+            // skip if overlaps with already taken or with cycleMask
+            if ((c.mask & takenMask) !== 0n) {
+                // some elements already taken (shouldn't happen because buildCoreqClosure excluded taken ones),
+                // but skip overlapping elements anyway
+                continue;
+            }
+            if ((c.mask & cycleMask) !== 0n) continue;
+            if (cycleCount + c.size > maxMaterias) continue;
+            if (cycleCreds + c.creds > maxCreditos) continue;
+            // accept closure
+            cycleMask |= c.mask;
+            cycleCount += c.size;
+            cycleCreds += c.creds;
+            // optimization: if cycle full, break
+            if (cycleCount === maxMaterias || cycleCreds === maxCreditos) break;
+        }
+
+        if (cycleMask === 0n) {
+            // Nothing could be scheduled this cycle due to limits (e.g., closures too big to fit).
+            // Strategy: attempt to schedule the *single* smallest closure that fits partially (split not allowed),
+            // or relax ordering by trying closures sorted by size ascending.
+            const sortedBySmall = closures.slice().sort((a, b) => a.size - b.size || a.creds - b.creds);
+            let singleMask = 0n, singleSize = 0, singleCred = 0;
+            for (const c of sortedBySmall) {
+                if (c.size <= maxMaterias && c.creds <= maxCreditos) { singleMask = c.mask; singleSize = c.size; singleCred = c.creds; break; }
+            }
+            if (singleMask === 0n) {
+                if (debug) console.warn("Planner: no closure cabe en un ciclo por límites de maxMaterias/maxCreditos. Salida parcial.");
+                break;
+            }
+            cycleMask = singleMask;
+            cycleCount = singleSize;
+            cycleCreds = singleCred;
+        }
+
+        // 5) commit cycle: mark as taken and push codes to plan
+        const codes = maskToCodes(cycleMask);
+        plan.push(codes);
+
+        takenMask |= cycleMask;
+
+        // progress guard: if after committing no new bits set, break to avoid infinite loop (defensive)
+        if (maskEquals(takenMask & allMask, takenMask & allMask) && plan.length > n * 2) {
+            // defensive break (shouldn't happen)
+            if (debug) console.warn("Planner: demasiados ciclos sin progreso estable detectados. Rompiendo.");
+            break;
+        }
+    } // end while
+
+    // final check: if we progressed at all return plan, otherwise return []
+    if (plan.length === 0) {
+        if (debug) console.warn("runPlanner: no se generó ningún ciclo (posible falta de prerrequisitos o restricciones muy estrictas).");
+        return [];
+    }
+
+    return plan;
+
+    // ---------- helpers locales ----------
+    function minCuatrOfMask(mask) {
         let minC = Infinity;
         for (let i = 0; i < n; i++) if (((mask >> BigInt(i)) & 1n) === 1n) minC = Math.min(minC, cuatr[i]);
         return minC === Infinity ? 999 : minC;
     }
-
-    // generate non-overlapping combos of groups (bounded by maxMaterias and maxCreditos)
-    function generateGroupCombos(groups, maxSize, maxCred) {
-        const combos = [];
-        const G = groups.length;
-        let totalCount = 0;
-
-        function backtrack(idx, currentMask, currentSize, currentCred) {
-            // pruning
-            if (currentSize > maxSize) return;
-            if (currentCred > maxCred) return;
-
-            if (currentMask !== 0n) {
-                combos.push({ mask: currentMask, size: currentSize, creditos: currentCred });
-                totalCount++;
-                if (totalCount > maxCombosLimit) return;
-            }
-
-            for (let j = idx; j < G; j++) {
-                const g = groups[j];
-                if ((currentMask & g.mask) !== 0n) continue; // overlap
-                if (currentSize + g.size > maxSize) continue;
-                if (currentCred + g.creditos > maxCred) continue;
-                backtrack(j + 1, currentMask | g.mask, currentSize + g.size, currentCred + g.creditos);
-                if (totalCount > maxCombosLimit) return;
-            }
-        }
-
-        backtrack(0, 0n, 0, 0);
-        // sort by fullness (prefer fuller cycles)
-        combos.sort((a, b) => b.size - a.size || a.creditos - b.creditos);
-        return combos.map(c => c.mask);
+    function computeUnlockPotential(mask) {
+        // sum of unlockCount of elements in mask
+        let s = 0;
+        for (let i = 0; i < n; i++) if (((mask >> BigInt(i)) & 1n) === 1n) s += (unlockCount[i] || 0);
+        return s;
     }
-
-    // heuristic: admissible lower bound
-    function heuristicLowerBound(currentTakenMask, maxByMat) {
-        const remaining = n - bitCount(currentTakenMask);
-        if (remaining <= 0) return 0;
-        const capBound = Math.ceil(remaining / maxByMat);
-        const chain = longestChainRemaining(currentTakenMask);
-        return Math.max(capBound, chain);
-    }
-
-    // Min priority queue (binary heap)
-    class MinPQ {
-        constructor() { this.heap = []; }
-        push(item, priority) { this.heap.push({ item, priority }); this._siftUp(this.heap.length - 1); }
-        pop() {
-            if (this.heap.length === 0) return null;
-            const it = this.heap[0].item;
-            const last = this.heap.pop();
-            if (this.heap.length > 0) { this.heap[0] = last; this._siftDown(0); }
-            return it;
-        }
-        isEmpty() { return this.heap.length === 0; }
-        _siftUp(i) {
-            while (i > 0) {
-                const p = Math.floor((i - 1) / 2);
-                if (this.heap[p].priority <= this.heap[i].priority) break;
-                [this.heap[p], this.heap[i]] = [this.heap[i], this.heap[p]];
-                i = p;
-            }
-        }
-        _siftDown(i) {
-            const n = this.heap.length;
-            while (true) {
-                let l = 2 * i + 1, r = 2 * i + 2, smallest = i;
-                if (l < n && this.heap[l].priority < this.heap[smallest].priority) smallest = l;
-                if (r < n && this.heap[r].priority < this.heap[smallest].priority) smallest = r;
-                if (smallest === i) break;
-                [this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]];
-                i = smallest;
-            }
-        }
-    }
-
-    // A* search
-    const startMask = (function () {
-        let m = 0n;
-        for (const code of aprobadasArray) {
-            const idx = codeToIdx.get(code);
-            if (idx !== undefined) m |= (1n << BigInt(idx));
-        }
-        return m;
-    })();
-
-    if ((startMask & allMask) === allMask) return []; // already finished
-
-    const pq = new MinPQ();
-    const startNode = { takenMask: startMask, g: 0, parent: null, action: 0n, f: heuristicLowerBound(startMask, maxMaterias) };
-    pq.push(startNode, startNode.f);
-
-    const visitedBest = new Map(); // key(mask) -> best g
-    const parentInfo = new Map();  // key(mask) -> { parentKey, actionMask }
-
-    function keyOf(mask) { return mask.toString(); }
-    visitedBest.set(keyOf(startMask), 0);
-    parentInfo.set(keyOf(startMask), { parent: null, action: 0n });
-
-    let expansions = 0;
-    let goalNode = null;
-
-    while (!pq.isEmpty()) {
-        const node = pq.pop();
-        expansions++;
-        const { takenMask, g } = node;
-
-        // goal?
-        if ((takenMask & allMask) === allMask) { goalNode = node; break; }
-
-        // generate groups and combos
-        const groups = computeEligibleGroups(takenMask, maxCreditos);
-        if (groups.length === 0) continue;
-
-        const combos = generateGroupCombos(groups, maxMaterias, maxCreditos);
-        if (!combos || combos.length === 0) continue;
-
-        for (const comboMask of combos) {
-            const newTaken = takenMask | comboMask;
-            const newKey = keyOf(newTaken);
-            const newG = g + 1;
-            const prev = visitedBest.get(newKey);
-            if (prev !== undefined && prev <= newG) continue;
-            visitedBest.set(newKey, newG);
-            parentInfo.set(newKey, { parent: keyOf(takenMask), action: comboMask });
-            const newNode = { takenMask: newTaken, g: newG, parent: keyOf(takenMask), action: comboMask, f: newG + heuristicLowerBound(newTaken, maxMaterias) };
-            pq.push(newNode, newNode.f);
-        }
-
-        if (expansions > expansionCap) {
-            console.warn("A* expansion cap reached; returning best-effort partial plan.");
-            break;
-        }
-    }
-
-    // reconstruct plan
-    function reconstructFrom(maskKey) {
-        const actionsRev = [];
-        let cur = maskKey;
-        while (true) {
-            const info = parentInfo.get(cur);
-            if (!info || !info.parent) break;
-            actionsRev.push(info.action);
-            cur = info.parent;
-        }
-        actionsRev.reverse();
-        return actionsRev.map(maskToCodes);
-    }
-
-    if (goalNode) {
-        return reconstructFrom(keyOf(goalNode.takenMask));
-    } else {
-        // fallback: choose visited state with most courses taken
-        let bestMask = startMask;
-        let bestCount = bitCount(startMask);
-        for (const k of visitedBest.keys()) {
-            const m = BigInt(k);
-            const c = bitCount(m);
-            if (c > bestCount) { bestCount = c; bestMask = m; }
-        }
-        if (bestCount === bitCount(startMask)) {
-            // nothing progressed
-            return [];
-        }
-        return reconstructFrom(keyOf(bestMask));
-    }
+    function maskEquals(a, b) { return a.toString() === b.toString(); }
 }

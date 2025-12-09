@@ -113,7 +113,7 @@ document.addEventListener("change", e => {
 
             <div class="col-6 col-md-3">
                 <label class="form-label">Máx. créditos por ciclo</label>
-                <input id="plannerMaxCreds" type="number" min="1" value="18" class="form-control">
+                <input id="plannerMaxCreds" type="number" min="1" value="25" class="form-control">
             </div>
         </div>
 
@@ -229,7 +229,7 @@ function renderPlannerOutput(plan, materiasDB) {
         html += `
         <div class="card mb-4 shadow">
             <div class="card-header bg-success text-white">
-                <strong>Ciclo ${String(real.ciclo).padStart(2, "0")}-${real.year}</strong>
+                <strong>Ciclo #${idx + 1} (${String(real.ciclo).padStart(2, "0")}-${real.year})</strong>
             </div>
             <ul class="list-group list-group-flush">
                 ${ciclo.map(code => {
