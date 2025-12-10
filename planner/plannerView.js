@@ -66,14 +66,16 @@ function filterElectiveChecklist(e) {
     });
 }
 
-// 4. Renderiza la lista de Materias Obligatorias con búsqueda y por ciclo (NUEVO)
+// 4. Renderiza la lista de Materias Obligatorias con búsqueda y por ciclo (MODIFICADO para usar switch global)
 function renderMateriasChecklist(materiasPorCiclo) {
     let html = `
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center mb-2">
             <h4>Materias aprobadas (Obligatorias)</h4>
-            <div>
-                <button id="selectAll" class="btn btn-sm btn-outline-warning me-2">Seleccionar todo</button>
-                <button id="unselectAll" class="btn btn-sm btn-outline-secondary">Deseleccionar</button>
+            <div class="form-check form-switch m-0">
+                <label class="form-check-label small" for="toggleAllMaterias">
+                    Todas
+                </label>
+                <input class="form-check-input" type="checkbox" id="toggleAllMaterias">
             </div>
         </div>
 
@@ -121,7 +123,7 @@ function renderMateriasChecklist(materiasPorCiclo) {
     return html;
 }
 
-// 5. Filtra la lista de Materias Obligatorias al escribir
+// 5. Filtra la lista de Materias Obligatorias al escribir (sin cambios)
 function filterMateriasObligatorias(e) {
     const searchText = e.target.value.toLowerCase();
     const container = document.getElementById('materiasObligatoriasContainer');
@@ -199,7 +201,29 @@ function refreshElectivesCreditCounter() {
 
 
 // =================================================================
-// VISTA PRINCIPAL (Sin cambios)
+// UTILIDAD PARA EL SWITCH GLOBAL
+// =================================================================
+
+// Sincroniza el estado del switch maestro global (Seleccionar Todo)
+function updateGlobalToggleState() {
+    const allMaterias = document.querySelectorAll("#materiasObligatoriasContainer .plannerAprobada");
+    const allToggle = document.getElementById("toggleAllMaterias");
+
+    if (!allToggle) return;
+
+    if (allMaterias.length === 0) {
+        allToggle.checked = false;
+        return;
+    }
+
+    // Si todas las materias visibles están chequeadas, el switch global se marca
+    const allChecked = Array.from(allMaterias).every(cb => cb.checked);
+
+    allToggle.checked = allChecked;
+}
+
+// =================================================================
+// VISTA PRINCIPAL (Sin Cambios)
 // =================================================================
 
 export function plannerView() {
@@ -249,7 +273,7 @@ export function plannerView() {
 
 
 // =================================================================
-// EVENTO principal: seleccionar pensum (MODIFICADO)
+// EVENTO principal: seleccionar pensum (Modificado con agrupación)
 // =================================================================
 document.addEventListener("change", e => {
     if (e.target.id !== "plannerPensum") return;
@@ -292,12 +316,12 @@ document.addEventListener("change", e => {
         </div>
     `;
 
-    // GENERAR HTML para Materias Aprobadas Obligatorias (USANDO NUEVO RENDER)
+    // GENERAR HTML para Materias Aprobadas Obligatorias
     const htmlMaterias = renderMateriasChecklist(materiasPorCiclo);
 
     document.getElementById("plannerStep2").innerHTML = `
         <hr>
-        <h4>Restricciones</h4>
+        <h4>Restricciones de Ciclo</h4>
         <div class="row g-3 mb-3">
             <div class="col-7 col-md-6">
                 <label class="form-label">Máx. materias que quieres tomar por ciclo</label>
@@ -311,33 +335,34 @@ document.addEventListener("change", e => {
         </div>
 
         <hr>
-        <h4>Información académica</h4>
+        <h4>Fecha de Incio</h4>
         <div class="row g-3 mb-3">
             <div class="col-6 col-md-3">
-                <label class="form-label">Último ciclo cursado</label>
-                <select id="lastCiclo" class="form-select">
+                <label class="form-label">Ciclo de inicio del plan</label>
+                <select id="startCiclo" class="form-select">
                     <option value="1">1 (Enero–Abril)</option>
                     <option value="2">2 (Mayo–Agosto)</option>
                     <option value="3">3 (Septiembre–Diciembre)</option>
                 </select>
             </div>
             <div class="col-6 col-md-3">
-                <label class="form-label">Año</label>
-                <input id="lastYear" type="number" class="form-control" value="${new Date().getFullYear()}" min="2000" max="2100">
+                <label class="form-label">Año de inicio</label>
+                <input id="startYear" type="number" class="form-control" value="${new Date().getFullYear()}" min="2000" max="2100">
             </div>
         </div>
 
         <hr>
+        ${htmlMaterias}
+        <hr class="my-4">
         ${htmlElectivas}
         <hr>
-        ${htmlMaterias}
-        <hr>
+        
         <button id="plannerRun" class="btn btn-warning btn-lg">
             Generar Plan
         </button>
     `;
 
-    // Configurar listeners para la nueva estructura de Electivas
+    // Configurar listeners (sin cambios)
     const approvedContainer = document.getElementById('electivasAprobadasChecklist');
     const planContainer = document.getElementById('electivasPlanChecklist');
     const checkboxListener = () => refreshElectivesCreditCounter();
@@ -348,28 +373,38 @@ document.addEventListener("change", e => {
     document.getElementById('electivasAprobadasSearch')?.addEventListener('keyup', filterElectiveChecklist);
     document.getElementById('electivasPlanSearch')?.addEventListener('keyup', filterElectiveChecklist);
 
-    // NUEVO: Listener para la búsqueda de materias obligatorias
     document.getElementById('materiasObligatoriasSearch')?.addEventListener('keyup', filterMateriasObligatorias);
 
     refreshElectivesCreditCounter();
 });
 
 
-// SELECT ALL / UNSELECT ALL (MODIFICADO para usar el nuevo selector)
+// ELIMINACIÓN DE LÓGICA OBSOLETA: El select all/unselect all se maneja con el switch en el 'change' listener.
 document.addEventListener("click", e => {
-    if (e.target.id === "selectAll") {
-        document.querySelectorAll("#materiasObligatoriasContainer .plannerAprobada").forEach(cb => cb.checked = true);
-        document.querySelectorAll("#materiasObligatoriasContainer .select-cycle-toggle").forEach(cb => cb.checked = true);
-    }
-    if (e.target.id === "unselectAll") {
-        document.querySelectorAll("#materiasObligatoriasContainer .plannerAprobada").forEach(cb => cb.checked = false);
-        document.querySelectorAll("#materiasObligatoriasContainer .select-cycle-toggle").forEach(cb => cb.checked = false);
-    }
+    // Lógica para selectAll/unselectAll buttons (eliminada)
+    // Se mantiene este bloque por si hay otra lógica de click que no se muestra, pero sin el código de botones.
 });
 
-// Sincronizar checkboxes de ciclo (MODIFICADO para el nuevo HTML)
+// Sincronizar checkboxes de ciclo y el nuevo switch global (MODIFICADO)
 document.addEventListener("change", e => {
-    // 1. Manejar el cambio del switch maestro (Seleccionar Todo por ciclo)
+
+    // 1. Manejar el cambio del switch maestro global
+    if (e.target.id === "toggleAllMaterias") {
+        const isChecked = e.target.checked;
+
+        // Seleccionar/Deseleccionar todos los checkboxes de materia obligatoria
+        document.querySelectorAll("#materiasObligatoriasContainer .plannerAprobada").forEach(cb => {
+            cb.checked = isChecked;
+        });
+
+        // Seleccionar/Deseleccionar todos los switches de ciclo
+        document.querySelectorAll("#materiasObligatoriasContainer .select-cycle-toggle").forEach(cb => {
+            cb.checked = isChecked;
+        });
+        return;
+    }
+
+    // 2. Manejar el cambio del switch maestro (Seleccionar Todo por ciclo)
     if (e.target.classList.contains("select-cycle-toggle")) {
         const isChecked = e.target.checked;
         const ciclo = e.target.dataset.cycle;
@@ -380,9 +415,13 @@ document.addEventListener("change", e => {
         checkboxes.forEach(checkbox => {
             checkbox.checked = isChecked;
         });
+
+        // Sincronizar el estado del switch maestro global
+        updateGlobalToggleState();
+        return;
     }
 
-    // 2. Manejar el cambio de un checkbox de materia individual
+    // 3. Manejar el cambio de un checkbox de materia individual
     if (e.target.classList.contains("plannerAprobada") && e.target.dataset.masterToggle) {
         const masterToggleId = e.target.dataset.masterToggle;
         const masterToggle = document.getElementById(masterToggleId);
@@ -395,13 +434,16 @@ document.addEventListener("change", e => {
         // Verificar si todos los checkboxes individuales están marcados
         const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
 
-        // Sincronizar el estado del maestro
+        // Sincronizar el estado del maestro de ciclo
         masterToggle.checked = allChecked;
+
+        // Sincronizar el estado del switch maestro global
+        updateGlobalToggleState();
     }
 });
 
 // =================================================================
-// Ejecutar el planificador (Sin cambios)
+// Ejecutar el planificador (Sin Cambios)
 // =================================================================
 document.addEventListener("click", e => {
     if (e.target.id !== "plannerRun") return;
@@ -413,7 +455,6 @@ document.addEventListener("click", e => {
     const { materias: mandatoryMaterias, electivas: allElectives } = normalizePensum(p);
 
     // 2. Obtener materias APROBADAS (obligatorias)
-    // El selector ahora es más específico para la nueva estructura
     const aprobadasBase = [...document.querySelectorAll("#materiasObligatoriasContainer .plannerAprobada:checked")]
         .map(c => c.value);
 
@@ -453,15 +494,18 @@ document.addEventListener("click", e => {
 
     document.getElementById("plannerResult").innerHTML =
         renderPlannerOutput(plan, materiasFinal);
+
+    document.body.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// CALCULAR CICLO REAL (Sin cambios)
-function calcularCicloReal(inicioIdx, lastCiclo, lastYear) {
+// CALCULAR CICLO REAL (Sin Cambios)
+function calcularCicloReal(planIdx, startCiclo, startYear) {
 
-    let ciclo = lastCiclo;
-    let year = lastYear;
+    let ciclo = startCiclo;
+    let year = startYear;
 
-    for (let i = 0; i <= inicioIdx; i++) {
+    // planIdx = 0 -> No corre el loop, retorna el ciclo/año de inicio.
+    for (let i = 0; i < planIdx; i++) {
         ciclo++;
         if (ciclo > 3) {
             ciclo = 1;
@@ -473,14 +517,16 @@ function calcularCicloReal(inicioIdx, lastCiclo, lastYear) {
 }
 
 
-// RENDER DEL RESULTADO (Sin cambios)
+// RENDER DEL RESULTADO (Sin Cambios)
 function renderPlannerOutput(plan, materiasDB) {
     if (!plan || plan.length === 0)
         return `<div class="alert alert-danger mt-3">No se pudo generar un plan.</div>`;
 
     const getMateria = code => materiasDB.find(m => m.codigo === code);
-    const lastCiclo = Number(document.getElementById("lastCiclo").value);
-    const lastYear = Number(document.getElementById("lastYear").value);
+
+    // AHORA LEE startCiclo y startYear
+    const startCiclo = Number(document.getElementById("startCiclo").value);
+    const startYear = Number(document.getElementById("startYear").value);
 
     let html = `
         <hr>
@@ -494,7 +540,8 @@ function renderPlannerOutput(plan, materiasDB) {
     `;
 
     plan.forEach((ciclo, idx) => {
-        const real = calcularCicloReal(idx, lastCiclo, lastYear);
+        // Usa los nuevos IDs: startCiclo y startYear
+        const real = calcularCicloReal(idx, startCiclo, startYear);
 
         html += `
         <div class="card mb-4 shadow">
@@ -539,37 +586,246 @@ function renderPlannerOutput(plan, materiasDB) {
     return html;
 }
 
-// EXPORTAR A PDF (Sin cambios)
+// EXPORTAR A PDF
 document.addEventListener("click", async e => {
     if (e.target.id !== "plannerPDF") return;
 
     const container = document.getElementById("plannerPlanContainer");
     if (!container) return alert("No hay plan para exportar.");
 
+    // Botón para retroalimentación
+    const pdfButton = e.target;
+    const originalButtonText = pdfButton.innerHTML;
+
+    // 1. Definir ancho de renderizado y configuración del PDF
+    const PDF_RENDER_WIDTH = 700;
+
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF("p", "mm", "a4");
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
     const margin = 10;
-    const contentWidth = pageWidth - 2 * margin;
-
+    const pdfContentWidth = pageWidth - 2 * margin;
     let cursorY = margin;
 
     const cards = container.querySelectorAll(".card");
+    const body = document.body;
 
-    for (const card of cards) {
-        const canvas = await html2canvas(card, { scale: 1.5, useCORS: true });
-        const imgData = canvas.toDataURL("image/jpeg", 0.8);
-        const imgHeight = (canvas.height * contentWidth) / canvas.width;
+    // Guardar estilos originales (Nuevas variables para posición y left)
+    const originalContainerDisplay = container.style.display;
+    const originalContainerWidth = container.style.width;
+    const originalContainerMaxWidth = container.style.maxWidth;
+    const originalContainerOverflowX = container.style.overflowX;
+    const originalContainerPosition = container.style.position; // <--- NUEVO
+    const originalContainerLeft = container.style.left;         // <--- NUEVO
+    const originalBodyOverflowX = body.style.overflowX;
+    const originalCardWidths = [];
+    cards.forEach(card => originalCardWidths.push(card.style.width));
 
-        if (cursorY + imgHeight > pageHeight - margin) {
+
+    try {
+        // ==========================================================
+        // 2. PREPARACIÓN Y APLICAR ESTILOS TEMPORALES PARA CAPTURA
+        // ==========================================================
+
+        // a. Mostrar indicador de carga y deshabilitar botón
+        pdfButton.disabled = true;
+        pdfButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Generando PDF...';
+
+        // b. Ocultar el contenedor de plan MOVIÉNDOLO FUERA DE PANTALLA
+        //    Esto mantiene el layout y permite a html2canvas capturar el contenido.
+        container.style.display = 'block'; // Asegurar que no esté 'none'
+        container.style.position = 'fixed';
+        container.style.left = '-9999px'; // Moverlo fuera de la vista
+
+        // c. Mitigar el desbordamiento del body
+        body.style.overflowX = 'hidden';
+
+        // d. Forzar el ancho de renderizado en el contenedor
+        container.style.width = `${PDF_RENDER_WIDTH}px`;
+        container.style.maxWidth = `${PDF_RENDER_WIDTH}px`;
+        container.style.overflowX = 'hidden';
+
+        // e. Ajustar las cards
+        cards.forEach(card => {
+            card.style.width = `${PDF_RENDER_WIDTH}px`;
+        });
+
+
+        // ==========================================================
+        // 3. RENDERIZAR CADA TARJETA
+        // ==========================================================
+        for (let i = 0; i < cards.length; i++) {
+            const card = cards[i];
+
+            const canvas = await html2canvas(card, {
+                scale: 3, // Mantiene la alta resolución para nitidez
+                useCORS: true
+            });
+
+            // Validar dimensiones antes de usar pdf.addImage
+            if (canvas.width === 0 || canvas.height === 0) {
+                console.warn(`Skipping card ${i} due to zero dimensions.`);
+                continue;
+            }
+
+            // Vuelve a JPEG con calidad 1.0 para fiabilidad en jsPDF
+            const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+            const imgHeightPDF = (canvas.height / canvas.width) * pdfContentWidth;
+
+            if (isNaN(imgHeightPDF) || imgHeightPDF <= 0) {
+                console.warn(`Skipping card ${i} due to invalid PDF height calculation: ${imgHeightPDF}.`);
+                continue;
+            }
+
+            // Añadir página si no cabe
+            if (cursorY + imgHeightPDF > pageHeight - margin) {
+                pdf.addPage();
+                cursorY = margin;
+            }
+
+            // Se usa "JPEG" como tipo de imagen
+            pdf.addImage(imgData, "JPEG", margin, cursorY, pdfContentWidth, imgHeightPDF);
+            cursorY += imgHeightPDF + 5;
+        }
+
+        // 5. Descargar (Solo si el try block termina sin errores)
+        pdf.save("Planificación de Materias.pdf");
+
+    } catch (error) {
+        // Manejo de cualquier error no capturado anteriormente
+        console.error("Error al generar el PDF:", error);
+        alert("Ocurrió un error inesperado al generar el PDF. Por favor, revisa la consola para más detalles.");
+    } finally {
+        // ==========================================================
+        // 4. RESTAURAR ESTILOS ORIGINALES (Se ejecuta siempre)
+        // ==========================================================
+
+        // a. Restaurar estilos del contenedor
+        container.style.width = originalContainerWidth;
+        container.style.maxWidth = originalContainerMaxWidth;
+        container.style.overflowX = originalContainerOverflowX;
+        container.style.position = originalContainerPosition; // <-- RESTAURADO
+        container.style.left = originalContainerLeft;         // <-- RESTAURADO
+        container.style.display = originalContainerDisplay; // Mostrar contenedor
+
+        // b. Restaurar estilos de las cards
+        cards.forEach((card, index) => {
+            card.style.width = originalCardWidths[index];
+        });
+
+        // c. CLAVE: Restaurar el overflow-x del body
+        body.style.overflowX = originalBodyOverflowX;
+
+        // d. Restaurar botón
+        pdfButton.innerHTML = originalButtonText;
+        pdfButton.disabled = false;
+    }
+});
+
+
+/* document.addEventListener("click", async e => {
+    if (e.target.id !== "plannerPDF") return;
+
+    const container = document.getElementById("plannerPlanContainer");
+    if (!container) return alert("No hay plan para exportar.");
+
+    // 1. Definir ancho de renderizado y configuración del PDF
+    const PDF_RENDER_WIDTH = 700;
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 10;
+    const pdfContentWidth = pageWidth - 2 * margin;
+    let cursorY = margin;
+
+    const cards = container.querySelectorAll(".card");
+    const body = document.body;
+
+    // ==========================================================
+    // 2. APLICAR ESTILOS TEMPORALES PARA CAPTURA (Flicker Fix)
+    // ==========================================================
+
+    // a. Guardar estilos originales
+    const originalContainerWidth = container.style.width;
+    const originalContainerMaxWidth = container.style.maxWidth;
+    const originalContainerOverflowX = container.style.overflowX;
+
+    // <--- NUEVOS ESTILOS PARA EVITAR EL FLICKER
+    const originalContainerPosition = container.style.position;
+    const originalContainerLeft = container.style.left;
+    // ----------------------------------------
+
+    // b. Mitigar el desbordamiento del body (CLAVE para móviles)
+    const originalBodyOverflowX = body.style.overflowX;
+    body.style.overflowX = 'hidden';
+
+    // c. Forzar el ancho de renderizado y MOVERLO OFF-SCREEN
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    container.style.width = `${PDF_RENDER_WIDTH}px`;
+    container.style.maxWidth = `${PDF_RENDER_WIDTH}px`;
+    container.style.overflowX = 'hidden';
+
+    // d. Ajustar las cards si es necesario
+    const originalCardWidths = [];
+    cards.forEach(card => {
+        originalCardWidths.push(card.style.width);
+        card.style.width = `${PDF_RENDER_WIDTH}px`;
+    });
+
+
+    // ==========================================================
+    // 3. RENDERIZAR CADA TARJETA (Mejora de Calidad)
+    // ==========================================================
+    for (let i = 0; i < cards.length; i++) {
+        const card = cards[i];
+
+        const canvas = await html2canvas(card, {
+            scale: 3, // Aumentar la escala a 3 para mejor resolución
+            useCORS: true
+        });
+
+        // Usar PNG (sin pérdida) para mejor calidad
+        const imgData = canvas.toDataURL("image/png");
+
+        const imgHeightPDF = (canvas.height / canvas.width) * pdfContentWidth;
+
+        // Añadir página si no cabe
+        if (cursorY + imgHeightPDF > pageHeight - margin) {
             pdf.addPage();
             cursorY = margin;
         }
 
-        pdf.addImage(imgData, "JPEG", margin, cursorY, contentWidth, imgHeight);
-        cursorY += imgHeight + 5;
+        // Usar 'PNG' como tipo de imagen para addImage
+        pdf.addImage(imgData, "PNG", margin, cursorY, pdfContentWidth, imgHeightPDF);
+        cursorY += imgHeightPDF + 5;
     }
 
-    pdf.save("plan.pdf");
-});
+    // ==========================================================
+    // 4. RESTAURAR ESTILOS ORIGINALES
+    // ==========================================================
+
+    // a. Restaurar estilos del contenedor
+    container.style.width = originalContainerWidth;
+    container.style.maxWidth = originalContainerMaxWidth;
+    container.style.overflowX = originalContainerOverflowX;
+
+    // <--- RESTAURAR POSICIÓN
+    container.style.position = originalContainerPosition;
+    container.style.left = originalContainerLeft;
+    // ----------------------
+
+    // b. Restaurar estilos de las cards
+    cards.forEach((card, index) => {
+        card.style.width = originalCardWidths[index];
+    });
+
+    // c. CLAVE: Restaurar el overflow-x del body
+    body.style.overflowX = originalBodyOverflowX;
+
+    pdf.save("Planificación de Materias.pdf");
+}); */
