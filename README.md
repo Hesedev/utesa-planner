@@ -1,75 +1,63 @@
-# 🏛️ Pensum Planner
+# 🎓 Pensum Planner
 
-**Planificador Académico Cuatrimestral Modular**
+![Logo del Proyecto] 
 
-[![Estado del Proyecto](https://img.shields.io/badge/Estado-Activo-brightgreen)](URL_DEL_REPOSITORIO)
-[![Licencia](https://img.shields.io/badge/Licencia-MIT-blue.svg)](LICENSE.md)
-
-Pensum Planner es una herramienta web modular y de código abierto (Open Source) diseñada para ayudar a los estudiantes a **organizar su plan de estudios (Pensum)** en un formato cuatrimestral flexible.
-
-El objetivo principal es tomar la malla curricular estática de una carrera (como las ofrecidas por la UTESA) y transformarla en una **planificación dinámica y editable** que:
-
-* Permita arrastrar y soltar asignaturas entre cuatrimestres.
-* Valide automáticamente el cumplimiento de los prerrequisitos.
-* Calcule los créditos totales por período y por plan.
-* Facilice la planificación a largo plazo y la toma de decisiones informadas sobre la carga académica.
-
-Esta versión está optimizada y probada con los planes de estudio de la Universidad Tecnológica de Santiago (**UTESA**), pero es adaptable a cualquier pensum cuatrimestral con estructura similar.
-
-### 💡 Características
-
-* **Planificación Drag & Drop:** Arrastre y suelte asignaturas fácilmente entre cuatrimestres.
-* **Validación de Prerrequisitos:** Alertas visuales que indican si una materia se coloca sin cumplir sus requisitos previos.
-* **Contador de Créditos:** Resumen automático de créditos matriculados por cuatrimestre.
-* **Importación de Pensum:** Carga de datos mediante archivos JSON estandarizados (ideal para pensums estructurados).
-* **Exportación a PDF:** Generación de un resumen del plan académico personalizado en formato PDF de alta calidad.
-* **Tecnología:** Desarrollado completamente con **Vanilla JavaScript**, HTML y CSS, sin dependencias de frameworks complejos.
-
-### 🏗️ Arquitectura y Stack Tecnológico
-
-El proyecto está diseñado siguiendo una arquitectura modular basada en el patrón Modelo-Vista-Controlador (MVC) simplificado, utilizando únicamente herramientas nativas del navegador.
-
-| Componente | Tecnología/Lenguaje | Propósito Principal |
-| :--- | :--- | :--- |
-| **Frontend** | Vanilla JavaScript, HTML5, CSS3 | Interfaz de usuario dinámica y manipulación del DOM. |
-| **Estado** | `state.js` | Manejo centralizado e inmutable del estado del planificador y los datos del pensum. |
-| **Lógica Central** | `/algorithm/plannerCore.js` | Contiene la lógica de negocio para la validación de prerrequisitos y cálculos de créditos. |
-| **Datos** | JSON | Utiliza un formato JSON estandarizado para la importación del pensum (ver `pensum-2016.json`). |
-
-### 🚀 Cómo Usarlo
-
-Simplemente acceda al demo alojado en GitHub Pages para empezar a planificar su pensum:
-
-[**Ir al Pensum Planner**](https://hesedev.github.io/pensum-planner/)
-
-#### B. Desarrollo Local (Open Source)
-
-Si desea contribuir o ejecutar el proyecto localmente:
-
-1.  **Clonar el repositorio:**
-    ```bash
-    git clone [https://github.com/Hesedev/pensum-planner.git](https://github.com/Hesedev/pensum-planner.git)
-    cd pensum-planner
-    ```
-2.  **Abrir `index.html`:**
-    Dado que es un proyecto Vanilla JS, no requiere un paso de compilación (`npm install`). Simplemente abra el archivo `index.html` en su navegador web o use una extensión de servidor local (como Live Server en VS Code).
-
-    ### 🤝 Contribución
-
-¡Este proyecto es Open Source y agradecemos cualquier tipo de colaboración! Si encuentras un error, tienes una sugerencia, o quieres mejorar la lógica de validación, por favor:
-
-1.  Abre un *Issue* describiendo el problema o la característica deseada.
-2.  Crea un *Fork* del proyecto.
-3.  Implementa tus cambios en una nueva rama.
-4.  Envía un *Pull Request* claro.
+**Pensum Planner** es una herramienta de planificación académica inteligente diseñada para ayudar a los estudiantes universitarios a optimizar su trayectoria de estudio. El sistema permite al estudiante **organizar de forma inteligente** su carrera, generando automáticamente el plan de materias más eficiente para completarla en el menor tiempo posible, respetando estrictamente todas las dependencias académicas.
 
 ---
 
-**Estamos especialmente interesados en:**
-* Mejorar el algoritmo de validación.
-* Adaptar el sistema a otros pensums cuatrimestrales.
-* Mejoras en la accesibilidad y el diseño (CSS).
+## 🚀 Características Esenciales
 
-### 📄 Licencia
+Pensum Planner ofrece las herramientas clave para la organización académica:
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE.md](LICENSE.md) para más detalles.
+* **Planificación Óptima:** Genera la secuencia de ciclos más eficiente basándose en el historial de materias aprobadas y los límites de créditos/asignaturas por ciclo.
+* **Gestión de Dependencias:** Soporte completo para la validación de prerrequisitos, correquisitos y reglas especiales de las materias.
+* **Editor de Pensums:** Permite cargar, crear y editar pensums completos, gestionando ciclos, materias y electivas.
+* **Portabilidad:** Importación y exportación de pensums en formato **JSON** para un fácil intercambio.
+* **Documentación:** Exportación del plan de estudio generado a un archivo **PDF** de alta calidad.
+
+---
+
+## 💡 Alcance y Compatibilidad
+
+### Enfoque
+
+Este proyecto fue desarrollado y está **especialmente optimizado** para la estructura académica **cuatrimestral** de la **Universidad Tecnológica de Santiago (UTESA)**.
+
+### Compatibilidad
+
+El sistema puede funcionar con cualquier plan de estudios (pensum) que siga un formato de ciclos (cuatrimestres/trimestres) y que pueda ser modelado en la estructura JSON interna del proyecto.
+
+---
+
+## 🛠️ Cómo Empezar
+
+Este es un proyecto **Vanilla JavaScript** y no requiere de instalaciones complejas.
+
+1.  **Clona el repositorio:**
+    ```bash
+    git clone [https://github.com/tu-usuario/pensum-planner.git](https://github.com/tu-usuario/pensum-planner.git)
+    ```
+2.  **Ejecución:** Simplemente abre el archivo `index.html` en tu navegador.
+    > **Nota:** Para que la importación/exportación de archivos funcione localmente, se recomienda usar un servidor local simple (ej. Live Server).
+
+---
+
+## 🤝 Contribuciones (Open Source)
+
+Este es un proyecto *open source*. Damos la bienvenida a la comunidad para:
+
+1.  Reportar errores o sugerir mejoras en la sección de [Issues](https://github.com/tu-usuario/pensum-planner/issues).
+2.  Contribuir código para ampliar la funcionalidad o mejorar el algoritmo.
+
+---
+
+## 🧑‍💻 Autor
+
+* **[Tu Nombre/Pseudónimo]** - [Tu Enlace de Contacto (ej: GitHub o LinkedIn)]
+
+---
+
+## 📜 Licencia
+
+Este proyecto está distribuido bajo la licencia [**MIT** (o la licencia que prefieras)].
