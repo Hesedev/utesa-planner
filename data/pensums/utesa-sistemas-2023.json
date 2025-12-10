@@ -1,0 +1,1234 @@
+{
+  "id": "pensum-2023",
+  "nombre": "Pensum 2023 - Ing. en Sistemas Computacionales UTESA",
+  "ciclos": [
+    {
+      "numero": 1,
+      "materias": [
+        {
+          "codigo": "ESP-181",
+          "nombre": "LENGUA ESPAÑOLA I",
+          "creditos": 4,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-117",
+          "nombre": "ALGORITMOS COMPUTACIONALES",
+          "creditos": 4,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "ING-105",
+          "nombre": "INGLÉS I",
+          "creditos": 4,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-115",
+          "nombre": "MATEMÁTICAS DISCRETAS",
+          "creditos": 4,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-160",
+          "nombre": "PRECALCULO",
+          "creditos": 4,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MED-750",
+          "nombre": "QUÍMICA INORGÁNICA",
+          "creditos": 3,
+          "prerequisitos": [],
+          "corequisitos": [
+            "MED-755"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MED-755",
+          "nombre": "LABORATORIO DE QUÍMICA INORGÁNICA",
+          "creditos": 1,
+          "prerequisitos": [],
+          "corequisitos": [
+            "MED-750"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "ORI-112",
+          "nombre": "ORIENTACIÓN UNIVERSITARIA",
+          "creditos": 2,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "SOC-182",
+          "nombre": "REFLEXIÓN FILOSÓFICA",
+          "creditos": 3,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "materias": [
+        {
+          "codigo": "ESP-189",
+          "nombre": "LENGUA ESPAÑOLA II",
+          "creditos": 4,
+          "prerequisitos": [
+            "ESP-181"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-164",
+          "nombre": "PROGRAMACIÓN I",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-117"
+          ],
+          "corequisitos": [
+            "INF-165"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-165",
+          "nombre": "LABORATORIO DE PROGRAMACIÓN I",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-117"
+          ],
+          "corequisitos": [
+            "INF-164"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-204",
+          "nombre": "LÓGICA COMPUTACIONAL",
+          "creditos": 4,
+          "prerequisitos": [
+            "MAT-115",
+            "INF-117"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "ING-115",
+          "nombre": "INGLÉS II",
+          "creditos": 4,
+          "prerequisitos": [
+            "ING-105"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-170",
+          "nombre": "CÁLCULO I",
+          "creditos": 4,
+          "prerequisitos": [
+            "MAT-160"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-190",
+          "nombre": "FÍSICA I",
+          "creditos": 4,
+          "prerequisitos": [
+            "MAT-160"
+          ],
+          "corequisitos": [
+            "MAT-191"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-191",
+          "nombre": "LABORATORIO DE FÍSICA I",
+          "creditos": 1,
+          "prerequisitos": [
+            "MAT-160"
+          ],
+          "corequisitos": [
+            "MAT-190"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "materias": [
+        {
+          "codigo": "ESP-302",
+          "nombre": "REDACCIÓN PROFESIONAL",
+          "creditos": 3,
+          "prerequisitos": [
+            "ESP-189"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-121",
+          "nombre": "ANÁLISIS DE SISTEMAS",
+          "creditos": 4,
+          "prerequisitos": [
+            "INF-164",
+            "INF-165"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-167",
+          "nombre": "PROGRAMACIÓN II (ORIENTADA A OBJETO)",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-164",
+            "INF-165"
+          ],
+          "corequisitos": [
+            "INF-168"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-168",
+          "nombre": "LABORATORIO DE PROGRAMACIÓN II",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-164",
+            "INF-165"
+          ],
+          "corequisitos": [
+            "INF-167"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "ING-125",
+          "nombre": "INGLÉS III",
+          "creditos": 4,
+          "prerequisitos": [
+            "ING-115"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-308",
+          "nombre": "PENSAMIENTO LÓGICO",
+          "creditos": 3,
+          "prerequisitos": [
+            "MAT-160",
+            "SOC-182"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-340",
+          "nombre": "CÁLCULO II",
+          "creditos": 4,
+          "prerequisitos": [
+            "MAT-170"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-500",
+          "nombre": "FÍSICA II",
+          "creditos": 4,
+          "prerequisitos": [
+            "MAT-190",
+            "MAT-191"
+          ],
+          "corequisitos": [
+            "MAT-501"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-501",
+          "nombre": "LABORATORIO DE FÍSICA II",
+          "creditos": 1,
+          "prerequisitos": [
+            "MAT-190",
+            "MAT-191"
+          ],
+          "corequisitos": [
+            "MAT-500"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "SOC-114",
+          "nombre": "METODOLOGÍA DE LA INVESTIGACIÓN I",
+          "creditos": 4,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "materias": [
+        {
+          "codigo": "IEL-100",
+          "nombre": "ELECTRICIDAD BÁSICA",
+          "creditos": 3,
+          "prerequisitos": [
+            "MAT-500",
+            "MAT-501"
+          ],
+          "corequisitos": [
+            "IEL-105"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "IEL-105",
+          "nombre": "TALLER DE ELECTRICIDAD BÁSICA",
+          "creditos": 1,
+          "prerequisitos": [
+            "MAT-500",
+            "MAT-501"
+          ],
+          "corequisitos": [
+            "IEL-100"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-171",
+          "nombre": "DISEÑO DE SISTEMAS",
+          "creditos": 4,
+          "prerequisitos": [
+            "INF-121",
+            "INF-167",
+            "INF-168"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-172",
+          "nombre": "PROGRAMACIÓN III (ORIENTADA A OBJETO)",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-121",
+            "INF-167",
+            "INF-168"
+          ],
+          "corequisitos": [
+            "INF-173"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-173",
+          "nombre": "LABORATORIO DE PROGRAMACIÓN III",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-121",
+            "INF-167",
+            "INF-168"
+          ],
+          "corequisitos": [
+            "INF-172"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-385",
+          "nombre": "BASE DE DATOS I",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-121",
+            "INF-167",
+            "INF-168"
+          ],
+          "corequisitos": [
+            "INF-387"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-387",
+          "nombre": "LABORATORIO DE BASE DE DATOS I",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-121",
+            "INF-167",
+            "INF-168"
+          ],
+          "corequisitos": [
+            "INF-385"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "ING-135",
+          "nombre": "INGLÉS IV",
+          "creditos": 4,
+          "prerequisitos": [
+            "ING-125"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-134",
+          "nombre": "FUNDAMENTOS DE ESTADÍSTICA",
+          "creditos": 3,
+          "prerequisitos": [
+            "MAT-100"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-350",
+          "nombre": "CÁLCULO III",
+          "creditos": 4,
+          "prerequisitos": [
+            "MAT-340"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "SOC-118",
+          "nombre": "METODOLOGÍA DE LA INVESTIGACIÓN II",
+          "creditos": 4,
+          "prerequisitos": [
+            "SOC-114"
+          ],
+          "corequisitos": [
+            "MAT-134"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "SOC-172",
+          "nombre": "DEBATES DE HISTORIA DOMINICANA",
+          "creditos": 3,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "materias": [
+        {
+          "codigo": "DIB-520",
+          "nombre": "DIBUJO TÉCNICO",
+          "creditos": 3,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "IID-420",
+          "nombre": "SEGURIDAD E HIGIENE INDUSTRIAL",
+          "creditos": 3,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-440",
+          "nombre": "ARQUITECTURA COMPUTACIONAL",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-204",
+            "IEL-100",
+            "IEL-105"
+          ],
+          "corequisitos": [
+            "INF-445"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-445",
+          "nombre": "LABORATORIO ARQUITECTURA COMPUTACIONAL",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-204",
+            "IEL-100",
+            "IEL-105"
+          ],
+          "corequisitos": [
+            "INF-440"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-481",
+          "nombre": "BASE DE DATOS II",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-171",
+            "INF-385",
+            "INF-387"
+          ],
+          "corequisitos": [
+            "INF-482"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-482",
+          "nombre": "LABORATORIO DE BASE DE DATOS II",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-171",
+            "INF-385",
+            "INF-387"
+          ],
+          "corequisitos": [
+            "INF-481"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-535",
+          "nombre": "DISEÑO Y PROGRAMACIÓN DE PÁGINAS WEB",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-171",
+            "INF-385",
+            "INF-387"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-360",
+          "nombre": "CÁLCULO IV",
+          "creditos": 4,
+          "prerequisitos": [
+            "MAT-350"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "SOC-502",
+          "nombre": "CIUDADANÍA Y GLOBALIZACIÓN",
+          "creditos": 2,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "materias": [
+        {
+          "codigo": "INF-184",
+          "nombre": "SISTEMAS OPERATIVOS",
+          "creditos": 2,
+          "prerequisitos": [
+            "INF-440",
+            "INF-445"
+          ],
+          "corequisitos": [
+            "INF-185"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-185",
+          "nombre": "LABORATORIO DE SISTEMAS OPERATIVOS",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-440",
+            "INF-445"
+          ],
+          "corequisitos": [
+            "INF-184"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-217",
+          "nombre": "ALGORITMOS Y ESTRUCTURAS DE DATOS",
+          "creditos": 2,
+          "prerequisitos": [
+            "INF-172",
+            "INF-173"
+          ],
+          "corequisitos": [
+            "INF-218"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-218",
+          "nombre": "LABORATORIO DE ALGORITMOS Y ESTRUCTURAS DE DATOS",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-172",
+            "INF-173"
+          ],
+          "corequisitos": [
+            "INF-217"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-225",
+          "nombre": "PROYECTO INTEGRADOR I",
+          "creditos": 5,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {
+            "requires_all_until": 5
+          }
+        },
+        {
+          "codigo": "INF-331",
+          "nombre": "SEMINARIO DE INFORMÁTICA",
+          "creditos": 3,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {
+            "requires_all_until": 5
+          }
+        },
+        {
+          "codigo": "INF-640",
+          "nombre": "MINERÍA DE DATOS",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-481",
+            "INF-482"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "ING-168",
+          "nombre": "INGLÉS PROFESIONAL",
+          "creditos": 4,
+          "prerequisitos": [
+            "ING-135"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-135",
+          "nombre": "ESTADÍSTICA PARA INGENIEROS I",
+          "creditos": 3,
+          "prerequisitos": [
+            "MAT-134"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "SOC-150",
+          "nombre": "ÉTICA PROFESIONAL",
+          "creditos": 2,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "materias": [
+        {
+          "codigo": "INF-502",
+          "nombre": "INTELIGENCIA ARTIFICIAL",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-217",
+            "INF-218"
+          ],
+          "corequisitos": [
+            "INF-503"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-503",
+          "nombre": "LABORATORIO INTELIGENCIA ARTIFICIAL",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-217",
+            "INF-218"
+          ],
+          "corequisitos": [
+            "INF-502"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-700",
+          "nombre": "COMPUTACIÓN GRÁFICA",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-440",
+            "INF-445",
+            "INF-184",
+            "INF-185"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-705",
+          "nombre": "MÉTODOS NUMÉRICOS",
+          "creditos": 3,
+          "prerequisitos": [
+            "MAT-360"
+          ],
+          "corequisitos": [
+            "INF-706"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-706",
+          "nombre": "LABORATORIO MÉTODOS NUMÉRICOS",
+          "creditos": 1,
+          "prerequisitos": [
+            "MAT-360"
+          ],
+          "corequisitos": [
+            "INF-705"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-710",
+          "nombre": "METODOLOGÍA ÁGIL",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-167",
+            "INF-168"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "MAT-145",
+          "nombre": "ESTADÍSTICA PARA INGENIEROS II",
+          "creditos": 3,
+          "prerequisitos": [
+            "MAT-135"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "SIC-766",
+          "nombre": "INTELIGENCIA EMOCIONAL",
+          "creditos": 3,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "SOC-155",
+          "nombre": "MEDIO AMBIENTE Y SOSTENIBILIDAD",
+          "creditos": 3,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "materias": [
+        {
+          "codigo": "ECO-525",
+          "nombre": "FINANZAS PERSONALES",
+          "creditos": 2,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "IID-725",
+          "nombre": "INVESTIGACIÓN OPERATIVA I",
+          "creditos": 3,
+          "prerequisitos": [
+            "MAT-360"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-241",
+          "nombre": "INGENIERÍA DE SOFTWARE I",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-225"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-810",
+          "nombre": "AUDITORÍA DE SISTEMAS INFORMÁTICOS",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-225"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-840",
+          "nombre": "PROGRAMACIÓN DE DISPOSITIVOS MÓVILES",
+          "creditos": 5,
+          "prerequisitos": [
+            "INF-535",
+            "INF-700"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "PASANTÍA",
+          "nombre": "PASANTÍA",
+          "creditos": 12,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {
+            "requires_all_until": 7
+          }
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "materias": [
+        {
+          "codigo": "ADM-910",
+          "nombre": "LIDERAZGO Y DESEMPEÑO",
+          "creditos": 3,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "IID-830",
+          "nombre": "INVESTIGACIÓN DE OPERATIVA II",
+          "creditos": 3,
+          "prerequisitos": [
+            "IID-725"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-021",
+          "nombre": "GESTIÓN DE PROYECTO INFORMÁTICO",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-241"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-411",
+          "nombre": "REDES Y COMUNICACIONES",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-440",
+            "INF-445",
+            "INF-184",
+            "INF-185"
+          ],
+          "corequisitos": [
+            "INF-412"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-412",
+          "nombre": "LABORATORIO DE REDES Y COMUNICACIONES",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-440",
+            "INF-445",
+            "INF-184",
+            "INF-185"
+          ],
+          "corequisitos": [
+            "INF-411"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-450",
+          "nombre": "INGENIERÍA DE SOFTWARE II",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-241"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-910",
+          "nombre": "PROGRAMACIÓN DE VIDEO JUEGOS",
+          "creditos": 5,
+          "prerequisitos": [
+            "INF-700"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "materias": [
+        {
+          "codigo": "ADM-900",
+          "nombre": "FORMACIÓN DE EMPRENDEDORES",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-021"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "IID-945",
+          "nombre": "INGENIERÍA ECONÓMICA",
+          "creditos": 3,
+          "prerequisitos": [
+            "MAT-360"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-344",
+          "nombre": "TELECOMUNICACIÓN DE DATOS",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-411",
+            "INF-412"
+          ],
+          "corequisitos": [
+            "INF-345"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-345",
+          "nombre": "LABORATORIO DE TELECOMUNICACIÓN DE DATOS",
+          "creditos": 1,
+          "prerequisitos": [
+            "INF-411",
+            "INF-412"
+          ],
+          "corequisitos": [
+            "INF-344"
+          ],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-433",
+          "nombre": "ASEGURAMIENTO DE CALIDAD DEL SOFTWARE",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-450"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-920",
+          "nombre": "COMPILADORES",
+          "creditos": 4,
+          "prerequisitos": [
+            "INF-502",
+            "INF-503",
+            "INF-184",
+            "INF-185"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "materias": [
+        {
+          "codigo": "DPG-010",
+          "nombre": "ANTEPROYECTO DE GRADO",
+          "creditos": 4,
+          "prerequisitos": [
+            "ADM-900"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "IID-025",
+          "nombre": "DISEÑO Y EVALUACIÓN DE PROYECTOS",
+          "creditos": 3,
+          "prerequisitos": [
+            "IID-945"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-025",
+          "nombre": "ALGORITMOS PARALELOS",
+          "creditos": 5,
+          "prerequisitos": [
+            "INF-705",
+            "INF-706"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        },
+        {
+          "codigo": "INF-820",
+          "nombre": "SEGURIDAD INFORMÁTICA",
+          "creditos": 3,
+          "prerequisitos": [
+            "INF-344",
+            "INF-345"
+          ],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {}
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "materias": [
+        {
+          "codigo": "DPG-020",
+          "nombre": "PROYECTO DE GRADO",
+          "creditos": 6,
+          "prerequisitos": [],
+          "corequisitos": [],
+          "tipo": "normal",
+          "reglas": {
+            "requires_all_until": 11
+          }
+        }
+      ]
+    }
+  ],
+  "electivas": [
+    {
+      "codigo": "INF-022",
+      "nombre": "SISTEMAS Y TECNOLOGÍA DE INFORMACIÓN",
+      "creditos": 3,
+      "prerequisitos": [
+        "INF-385",
+        "INF-387"
+      ],
+      "corequisitos": [],
+      "tipo": "electiva",
+      "reglas": {}
+    },
+    {
+      "codigo": "INF-023",
+      "nombre": "DOMÓTICA Y ENTORNO INTELIGENTE",
+      "creditos": 3,
+      "prerequisitos": [
+        "INF-344",
+        "INF-345"
+      ],
+      "corequisitos": [],
+      "tipo": "electiva",
+      "reglas": {}
+    },
+    {
+      "codigo": "INF-024",
+      "nombre": "ADMINISTRACIÓN DE NEGOCIOS ELECTRÓNICOS",
+      "creditos": 3,
+      "prerequisitos": [
+        "INF-225"
+      ],
+      "corequisitos": [],
+      "tipo": "electiva",
+      "reglas": {}
+    },
+    {
+      "codigo": "INF-026",
+      "nombre": "ROBÓTICA",
+      "creditos": 3,
+      "prerequisitos": [
+        "INF-344",
+        "INF-345"
+      ],
+      "corequisitos": [],
+      "tipo": "electiva",
+      "reglas": {}
+    },
+    {
+      "codigo": "INF-950",
+      "nombre": "MINERÍA DE DATOS",
+      "creditos": 3,
+      "prerequisitos": [
+        "INF-481",
+        "INF-482"
+      ],
+      "corequisitos": [],
+      "tipo": "electiva",
+      "reglas": {}
+    },
+    {
+      "codigo": "IEL-200",
+      "nombre": "CIRCUITOS ELÉCTRICOS I",
+      "creditos": 4,
+      "prerequisitos": [
+        "IEL-100",
+        "IEL-105"
+      ],
+      "corequisitos": [],
+      "tipo": "electiva",
+      "reglas": {}
+    },
+    {
+      "codigo": "IEL-205",
+      "nombre": "LABORATORIO DE CIRCUITOS ELÉCTRICOS I",
+      "creditos": 1,
+      "prerequisitos": [
+        "IEL-100",
+        "IEL-105"
+      ],
+      "corequisitos": [],
+      "tipo": "electiva",
+      "reglas": {}
+    }
+  ]
+}

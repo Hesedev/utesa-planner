@@ -1,6 +1,6 @@
 # 🎓 Pensum Planner
 
-![Logo del Pensum Planner](./assets/logo.png)
+![Logo del Pensum Planner](assets/logo.png)
 
 **Pensum Planner** es una herramienta de planificación académica inteligente diseñada para ayudar a los estudiantes universitarios a optimizar su trayectoria de estudio. El sistema permite al estudiante **organizar de forma inteligente** su carrera, generando automáticamente el plan de materias más eficiente para completarla en el menor tiempo posible, respetando estrictamente todas las dependencias académicas.
 
