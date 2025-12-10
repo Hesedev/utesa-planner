@@ -85,20 +85,30 @@ document.addEventListener("change", e => {
 
     for (const ciclo in materiasPorCiclo) {
         htmlMaterias += `
-            <h5 class="mt-3">Ciclo ${ciclo}</h5>
-            <div class="row">
+            <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
+                <h5 class="m-0">Ciclo #${ciclo}</h5>
+                
+                <div class="form-check">
+                    <label class="form-check-label" for="toggle-ciclo-${ciclo}">
+                        Seleccionar Todo
+                    </label>
+                    <input class="form-check-input select-cycle-toggle" type="checkbox" id="toggle-ciclo-${ciclo}" data-cycle="${ciclo}">
+                </div>
+            </div>
+            <div class="row cycle-${ciclo}-checkboxes">
                 ${materiasPorCiclo[ciclo].map(m => `
-                    <div class="col-6 col-md-4">
+                    <div class="col-sm-6 col-md-4">
                         <div class="form-check">
-                            <input class="form-check-input plannerAprobada" 
-                                   type="checkbox" value="${m.codigo}">
-                            <label class="form-check-label">
+                            <input class="form-check-input plannerAprobada cycle-checkbox-${ciclo}" 
+                                        type="checkbox" value="${m.codigo}"
+                                        data-master-toggle="toggle-ciclo-${ciclo}"> <label class="form-check-label">
                                 ${m.codigo} — ${m.nombre}
                             </label>
                         </div>
                     </div>
                 `).join("")}
             </div>
+            <hr>
         `;
     }
 
@@ -106,12 +116,12 @@ document.addEventListener("change", e => {
         <hr>
         <h4>Restricciones</h4>
         <div class="row g-3 mb-3">
-            <div class="col-6 col-md-3">
-                <label class="form-label">Máx. materias por ciclo</label>
+            <div class="col-7 col-md-6">
+                <label class="form-label">Máx. materias que quieres tomar por ciclo</label>
                 <input id="plannerMaxMats" type="number" min="1" value="4" class="form-control">
             </div>
 
-            <div class="col-6 col-md-3">
+            <div class="col-5 col-md-4">
                 <label class="form-label">Máx. créditos por ciclo</label>
                 <input id="plannerMaxCreds" type="number" min="1" value="25" class="form-control">
             </div>
@@ -136,8 +146,7 @@ document.addEventListener("change", e => {
 
         <hr>
         ${htmlMaterias}
-
-        <hr>
+        
         <button id="plannerRun" class="btn btn-warning btn-lg">
             Generar Plan
         </button>
@@ -155,6 +164,39 @@ document.addEventListener("click", e => {
     }
 });
 
+// Nuevo evento: Sincronizar checkboxes del ciclo con el switch maestro
+document.addEventListener("change", e => {
+    // 1. Manejar el cambio del switch maestro (Seleccionar Todo)
+    if (e.target.classList.contains("select-cycle-toggle")) {
+        const isChecked = e.target.checked;
+        const ciclo = e.target.dataset.cycle;
+
+        // Seleccionar todos los checkboxes que pertenecen a ese ciclo
+        const checkboxes = document.querySelectorAll(`.cycle-checkbox-${ciclo}`);
+
+        // Sincronizar todos los checkboxes individuales con el estado del maestro
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = isChecked;
+        });
+    }
+
+    // 2. Manejar el cambio de un checkbox de materia individual
+    if (e.target.classList.contains("plannerAprobada") && e.target.dataset.masterToggle) {
+        const masterToggleId = e.target.dataset.masterToggle;
+        const masterToggle = document.getElementById(masterToggleId);
+
+        if (!masterToggle) return; // Si no hay maestro asociado, salir
+
+        const ciclo = masterToggle.dataset.cycle;
+        const checkboxes = document.querySelectorAll(`.cycle-checkbox-${ciclo}`);
+
+        // Verificar si todos los checkboxes individuales están marcados
+        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+        // Sincronizar el estado del maestro
+        masterToggle.checked = allChecked;
+    }
+});
 
 // Ejecutar el planificador
 document.addEventListener("click", e => {
