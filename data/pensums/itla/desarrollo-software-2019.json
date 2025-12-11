@@ -1,0 +1,561 @@
+{
+    "id": "tecnologo-desarrollo-software-2019",
+    "nombre": "Tecnólogo en Desarrollo de Software",
+    "periodoAcademico": "Cuatrimestral",
+    "ciclos": [
+        {
+            "numero": 1,
+            "materias": [
+                {
+                    "codigo": "TI-101",
+                    "nombre": "FUNDAMENTOS DEL COMPUTADOR",
+                    "creditos": 4,
+                    "prerequisitos": [],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-001",
+                    "nombre": "INTRODUCCIÓN A LA ELABORACIÓN DE ALGORITMOS",
+                    "creditos": 4,
+                    "prerequisitos": [],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "HIS-101",
+                    "nombre": "HISTORIA UNIVERSAL",
+                    "creditos": 3,
+                    "prerequisitos": [],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "ESP-101",
+                    "nombre": "REDACCIÓN CASTELLANA",
+                    "creditos": 4,
+                    "prerequisitos": [],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "MAT-001",
+                    "nombre": "PRE-CÁLCULO",
+                    "creditos": 5,
+                    "prerequisitos": [],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "OAI-001",
+                    "nombre": "ORIENTACIÓN INSTITUCIONAL",
+                    "creditos": 1,
+                    "prerequisitos": [],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "CBG-110",
+                    "nombre": "ÉTICA 1",
+                    "creditos": 3,
+                    "prerequisitos": [],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "ING-001",
+                    "nombre": "INGLÉS NIVEL 1-3",
+                    "creditos": 0,
+                    "prerequisitos": [],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                }
+            ]
+        },
+        {
+            "numero": 2,
+            "materias": [
+                {
+                    "codigo": "HIS-102",
+                    "nombre": "HISTORIA DOMINICANA",
+                    "creditos": 3,
+                    "prerequisitos": [
+                        "HIS-101"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "MAT-101",
+                    "nombre": "CÁLCULO DIFERENCIAL",
+                    "creditos": 5,
+                    "prerequisitos": [
+                        "MAT-001"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TI-115",
+                    "nombre": "CONTABILIDAD FINANCIERA",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "MAT-001"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "ING-002",
+                    "nombre": "INGLÉS NIVEL 4-6",
+                    "creditos": 0,
+                    "prerequisitos": [
+                        "ING-001"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-002",
+                    "nombre": "FUNDAMENTOS DE PROGRAMACIÓN",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TI-101",
+                        "TDS-001"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "CBG-115",
+                    "nombre": "ÉTICA 2",
+                    "creditos": 3,
+                    "prerequisitos": [
+                        "CBG-110"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-101",
+                    "nombre": "INTRODUCCIÓN A LAS BASES DE DATOS",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-001"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                }
+            ]
+        },
+        {
+            "numero": 3,
+            "materias": [
+                {
+                    "codigo": "CBG-210",
+                    "nombre": "PROBABILIDAD Y ESTADÍSTICA",
+                    "creditos": 3,
+                    "prerequisitos": [
+                        "MAT-101"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-003",
+                    "nombre": "PROGRAMACIÓN I",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-002",
+                        "TDS-101"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-004",
+                    "nombre": "ANÁLISIS Y DISEÑO DE SISTEMAS",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-002"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "MAT-102",
+                    "nombre": "CÁLCULO INTEGRAL",
+                    "creditos": 5,
+                    "prerequisitos": [
+                        "MAT-101"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "FIS-110",
+                    "nombre": "FÍSICA GENERAL",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "MAT-101"
+                    ],
+                    "corequisitos": [
+                        "FIS-110-L"
+                    ],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "FIS-110-L",
+                    "nombre": "LABORATORIO FÍSICA GENERAL",
+                    "creditos": 1,
+                    "prerequisitos": [
+                        "MAT-101"
+                    ],
+                    "corequisitos": [
+                        "FIS-110"
+                    ],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "ING-003",
+                    "nombre": "INGLÉS NIVEL 7-9",
+                    "creditos": 0,
+                    "prerequisitos": [
+                        "ING-002"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "CBG-120",
+                    "nombre": "ÉTICA 3",
+                    "creditos": 3,
+                    "prerequisitos": [
+                        "CBG-115"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                }
+            ]
+        },
+        {
+            "numero": 4,
+            "materias": [
+                {
+                    "codigo": "TDS-005",
+                    "nombre": "DISEÑO CENTRADO EN EL USUARIO",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-003",
+                        "TDS-004"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "CBG-215",
+                    "nombre": "METODOLOGÍA DE LA INVESTIGACIÓN",
+                    "creditos": 3,
+                    "prerequisitos": [
+                        "CBG-210"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-102",
+                    "nombre": "BASE DE DATOS AVANZADA",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-101",
+                        "TDS-002"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-006",
+                    "nombre": "PROGRAMACIÓN II",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-003",
+                        "TDS-004"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-201",
+                    "nombre": "INTELIGENCIA ARTIFICIAL",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-003",
+                        "TDS-004"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "ING-004",
+                    "nombre": "INGLÉS NIVEL 10-12",
+                    "creditos": 0,
+                    "prerequisitos": [
+                        "ING-003"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                }
+            ]
+        },
+        {
+            "numero": 5,
+            "materias": [
+                {
+                    "codigo": "TDS-301",
+                    "nombre": "AUDITORÍA INFORMÁTICA",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-102",
+                        "TDS-006"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-007",
+                    "nombre": "PROGRAMACIÓN III",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-005",
+                        "TDS-006"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-103",
+                    "nombre": "MINERÍA DE DATOS E INTELIGENCIA DE NEGOCIOS",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-102"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TME-001",
+                    "nombre": "FUNDAMENTOS DE ELECTRÓNICA",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-102",
+                        "TDS-006"
+                    ],
+                    "corequisitos": [
+                        "TME-001-L"
+                    ],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TME-001-L",
+                    "nombre": "LABORATORIO FUNDAMENTOS DE ELECTRÓNICA",
+                    "creditos": 1,
+                    "prerequisitos": [
+                        "MAT-001"
+                    ],
+                    "corequisitos": [
+                        "TME-001"
+                    ],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-008",
+                    "nombre": "PROGRAMACIÓN WEB",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-102",
+                        "TDS-003"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "ELECTIVA-1",
+                    "nombre": "ELECTIVA",
+                    "creditos": 3,
+                    "prerequisitos": [],
+                    "corequisitos": [],
+                    "tipo": "electiva",
+                    "reglas": {}
+                }
+            ]
+        },
+        {
+            "numero": 6,
+            "materias": [
+                {
+                    "codigo": "TDS-009",
+                    "nombre": "PROGRAMACIÓN PARALELA",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-102",
+                        "TDS-006"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-303",
+                    "nombre": "INTRODUCCIÓN A LA INGENIERÍA DE SOFTWARE",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-007",
+                        "TDS-103"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "ELECTIVA-2",
+                    "nombre": "ELECTIVA",
+                    "creditos": 3,
+                    "prerequisitos": [
+                        "TDS-301"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "electiva",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "DEP-101",
+                    "nombre": "EDUCACIÓN FÍSICA",
+                    "creditos": 0,
+                    "prerequisitos": [
+                        "CBG-215"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "ADM-110",
+                    "nombre": "DESARROLLO DE EMPRENDEDORES",
+                    "creditos": 3,
+                    "prerequisitos": [
+                        "ING-004"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "ING-110",
+                    "nombre": "INGLÉS TÉCNICO",
+                    "creditos": 4,
+                    "prerequisitos": [],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                }
+            ]
+        },
+        {
+            "numero": 7,
+            "materias": [
+                {
+                    "codigo": "TDS-010",
+                    "nombre": "ESTRUCTURA DE DATOS",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-007"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-302",
+                    "nombre": "ADMINISTRACIÓN DE PROYECTOS DE SOFTWARE",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-007"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-011",
+                    "nombre": "INTRODUCCIÓN AL DESARROLLO DE APLICACIONES MÓVILES",
+                    "creditos": 4,
+                    "prerequisitos": [
+                        "TDS-007"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "ADM-111",
+                    "nombre": "PLAN DE NEGOCIOS",
+                    "creditos": 3,
+                    "prerequisitos": [
+                        "ADM-110"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                },
+                {
+                    "codigo": "TDS-601",
+                    "nombre": "PROYECTO FINAL TDS",
+                    "creditos": 3,
+                    "prerequisitos": [
+                        "TDS-009",
+                        "TDS-303"
+                    ],
+                    "corequisitos": [],
+                    "tipo": "normal",
+                    "reglas": {}
+                }
+            ]
+        }
+    ],
+    "electivas": []
+}
